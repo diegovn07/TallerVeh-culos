@@ -1,0 +1,20 @@
+﻿@model string
+
+@if (Model == "1")
+{
+    <div class="alert alert-success">
+        <strong>Listo!</strong> Agregado exitosamente.
+    </div>
+}
+else if (Model == "2")
+{
+    <div class="alert alert-warning">
+        <strong>Advertencia!</strong> Existencias insuficientes.
+    </div>
+}
+else if (Model == "3")
+{
+    <div class="alert alert-danger">
+        <strong>Error!</strong> Complete todos los campos.
+    </div>
+}

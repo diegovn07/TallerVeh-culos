@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Modelo.Servicio>
+
+<label>Artículo/Servicio</label>
+<select required class="custom-select" id="articulo" name="Articulo">
+    <option selected>Seleccione...</option>
+    @foreach (var i in Model)
+    {
+        <option value="@i.id">@i.descripcion</option>
+    }
+</select>

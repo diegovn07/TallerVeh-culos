@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Modelo.Cobros>
+
+@if (Model != null)
+{
+    <div class="container mb-3 mt-3 bg-white" id="pdf">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered" style="width: 100%" id="mydatatable">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.descripcion)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.cantidad)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.total)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="text-center">
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.descripcion)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.cantidad)
+                            </td>
+                            <td class="align-middle">
+                                @Html.DisplayFor(modelItem => item.total)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfooter>
+                    <tr class="text-center">
+                        <td class="align-middle">
+                        </td>
+                        <td class="align-middle">
+                            <p>Total:</p>
+                        </td>
+                        <td class="align-middle">
+                            @ViewBag.total
+                        </td>
+                    </tr>
+                </tfooter>
+            </table>
+        </div>
+    </div>
+    <div class="align-content-center">
+            <button class="btn btn-warning w-25" id="download">DESCARGAR PDF</button>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>Advertencia!</strong> Debe indicar el cliente y vehiculo.
+    </div>
+}
+

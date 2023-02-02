@@ -1,0 +1,239 @@
+﻿
+@{
+    ViewBag.Title = "AgregarReparacion";
+    List<SelectListItem> clientes = (List<SelectListItem>)ViewBag.clientes;
+}
+
+<h2>Agregar Reparacion</h2>
+<div class="d-flex flex-column text-center mb-3">
+    <div id="notificacion">
+
+    </div>
+    <table class="table table-striped">
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <select required class="custom-select" name="Cliente" id="cliente">
+                        <option value="0" selected>Seleccione...</option>
+                        @foreach (var i in clientes)
+                        {
+                            <option value="@i.Value">@i.Text</option>
+                        }
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="form-group" id="ListaVehiculos">
+                    <label>Vehículo</label>
+                    <select required class="custom-select" id="vehiculo" name="Vehiculo">
+                        <option selected>Seleccione Cliente Primero...</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label>Agregar:</label>
+                    <select class="custom-select ml-2" name="Tipo" id="Tipo">
+                        <option selected>Seleccione...</option>
+                        <option value="1">Repuestos</option>
+                        <option value="2">Servicios</option>
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="form-group" id="lista">
+                    <label>Artículo/Servicio</label>
+                    <select required class="custom-select" id="articulo" name="Articulo">
+                        <option selected>Seleccione Tipo Primero...</option>
+                    </select>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group d-flex">
+                    <label>Cantidad:</label>
+                    <input type="number" class="form-control" id="cantidad" name="Cantidad" placeholder="Cantidad" required>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <button id="cargarReparacion" class="btn btn-success">Agregar</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div class="align-content-center">
+        <button id="cargarLista" class="btn btn-success w-25">Cargar lista de Agregados</button>
+    </div>
+    <div class="bg-white" id="listaCobros">
+
+
+    </div>
+
+    @*<div class="align-content-center">
+            <button class="btn btn-warning w-25" style="visibility:hidden" id="download">DESCARGAR PDF</button>
+        </div>*@
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/chosen.jquery.min.js"></script>
+    <script src="~/Scripts/chosen.jquery.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#cliente").change(function () {
+                var client = $("#cliente").val();
+                var url = "/Cliente/ObtenerVehiculos/?id=" + client;
+                $.ajax({
+                    url: url,
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#ListaVehiculos').html(data);
+                        /* little fade in effect */
+                        $('#ListaVehiculos').fadeIn('fast');
+
+                        $("#vehiculo").chosen({
+                            no_results_text: "Oops, nada por aquí!",
+                            width: "95%"
+                        });
+
+                    },
+                    error: function (reponse) {
+                        alert("error : " + reponse);
+                    }
+                });
+
+            });
+
+            $(function () {
+                $("#cliente").chosen({
+                    no_results_text: "Oops, nada por aquí!",
+                    width: "95%"
+                });
+            });
+
+            $(function () {
+                $("#vehiculo").chosen({
+                    no_results_text: "Oops, nada por aquí!",
+                    width: "95%"
+                });
+            });
+
+            $(function () {
+                $("#Tipo").chosen({
+                    no_results_text: "Oops, nada por aquí!",
+                    width: "95%"
+                });
+            });
+
+            $(function () {
+                $("#articulo").chosen({
+                    no_results_text: "Oops, nada por aquí!",
+                    width: "95%"
+                });
+            });
+
+            $("#Tipo").change(function () {
+                var type = $("#Tipo").val();
+
+                if (type == 1)
+                    var url = "/Repuesto/ObtenerRepuestos/";
+                else
+                    var url = "/Servicio/ObtenerServicios/";
+                //var url = "/Cliente/ObtenerVehiculos/?id=" + type;
+                $.ajax({
+                    url: url,
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#lista').html(data);
+                        /* little fade in effect */
+                        $('#lista').fadeIn('fast');
+
+                        $("#articulo").chosen({
+                            no_results_text: "Oops, nada por aquí!",
+                            width: "95%"
+                        });
+                    },
+                    error: function (reponse) {
+                        alert("error : " + reponse);
+                    }
+                });
+            });
+
+
+            $("#cargarReparacion").click(function () {
+                var cliente = $("#cliente").val();
+                var vehiculo = $("#vehiculo").val();
+                var tipo = $("#Tipo").val();
+                var articulo = $("#articulo").val();
+                var cantidad = $("#cantidad").val();
+                var url = "/Cliente/AgregarReparacion/?Cliente=" + cliente + "&Vehiculo=" + vehiculo + "&Tipo=" + tipo + "&Articulo=" + articulo + "&Cantidad=" + cantidad;
+                $.ajax({
+                    url: url,
+                    cache: false,
+                    type: "POST",
+                    success: function (data) {
+                        $('#notificacion').html(data);
+                        /* little fade in effect */
+                        $('#notificacion').fadeIn('fast');
+                    },
+                    error: function (reponse) {
+                        alert("Error : Complete todos los campos");
+                    }
+                });
+
+            });
+
+            $("#cargarLista").click(function () {
+                var cliente = $("#cliente").val();
+                var vehiculo = $("#vehiculo").val();
+                var url = "/Cliente/cargarLista/?cliente=" + cliente + "&vehiculo=" + vehiculo;
+                $.ajax({
+                    url: url,
+                    cache: false,
+                    type: "GET",
+                    success: function (data) {
+                        $('#listaCobros').html(data);
+                        /* little fade in effect */
+                        $('#listaCobros').fadeIn('fast');
+
+                            $('#download').click(function () {
+                                var options = {
+                                };
+                                var pdf = new jsPDF('p', 'pt', 'a4');
+                                pdf.addHTML($("#pdf"), 15, 15, options, function () {
+                                    pdf.save('informe.pdf');
+                                });
+                            });
+                        $('#cargarLista').text("Recargar");
+                    },
+                    error: function (reponse) {
+                        alert("error : " + "Complete los campos necesarios");
+                    }
+                });
+
+            });
+
+        });
+    </script>
+    <script src="~/Scripts/jspdf.min.js"></script>
+    @*<script>
+        $(function () {
+            $('#download').click(function () {
+                var options = {
+                };
+                var pdf = new jsPDF('p', 'pt', 'a4');
+                pdf.addHTML($("#listaCobros"), 15, 15, options, function () {
+                    pdf.save('informe.pdf');
+                });
+            });
+        });
+    </script>*@
+
+}

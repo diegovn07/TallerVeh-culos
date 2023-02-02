@@ -1,0 +1,70 @@
+﻿@model Modelo.Vehiculo
+
+@{
+    ViewBag.Title = "AgregarVehiculo";
+    List<SelectListItem> clientes = (List<SelectListItem>)ViewBag.clientes;
+}
+
+<h2>Agregar Vehiculo</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <table class="table table-striped">
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label>Cliente</label>
+                    <select required class="custom-select" name="Cliente" id="inputGroupSelect01">
+                        <option selected>Seleccione...</option>
+                        @foreach (var i in clientes)
+                        {
+                            <option value="@i.Value">@i.Text</option>
+                        }
+                    </select>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label>Placa</label>
+                    <input type="text" class="form-control" id="txtPlaca" name="Placa" placeholder="Placa" required>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" class="form-control" id="txtMarca" name="Marca" placeholder="Marca" required>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <label>Modelo</label>
+                    <input type="text" class="form-control" id="txtModelo" name="Modelo" placeholder="Modelo" required>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <div class="form-group">
+                    <label>Año</label>
+                    <input type="number" class="form-control" id="txtAno" name="Ano" placeholder="Año" required>
+                </div>
+            </td>
+            <td>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success">Agregar</button>
+                </div>
+            </td>
+        </tr>
+    </table>
+}
+
+<div>
+    @Html.ActionLink("Volver a la Lista", "Index")
+</div>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
